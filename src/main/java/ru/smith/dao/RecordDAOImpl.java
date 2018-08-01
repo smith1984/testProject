@@ -9,13 +9,13 @@ import java.util.List;
 
 public class RecordDAOImpl implements RecordDAO {
 
-    private Session session = HibernateUtil.getSessionFactory().openSession();
+    private Session session;
 
     @Override
     public List<Record> listAllRecords() {
         try{
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-
             Query query = session.createQuery("SELECT r FROM Record r");
             session.getTransaction().commit();
             return query.list();
@@ -28,17 +28,16 @@ public class RecordDAOImpl implements RecordDAO {
         }
         finally {
             session.close();
-            HibernateUtil.shutdown();
         }
     }
 
     @Override
-    public void saveOrUpdate(Record record) {
+    public void save(Record record) {
         try{
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
             session.beginTransaction();
-            session.saveOrUpdate(record);
+            session.save(record);
             session.getTransaction().commit();
-            System.out.println("Record add db");
         }
         catch (Exception e){
             session.getTransaction().rollback();
@@ -46,7 +45,6 @@ public class RecordDAOImpl implements RecordDAO {
         }
         finally {
             session.close();
-            HibernateUtil.shutdown();
         }
     }
 }

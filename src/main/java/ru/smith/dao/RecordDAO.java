@@ -7,6 +7,6 @@ import java.util.List;
 public interface RecordDAO {
 
     public List<Record> listAllRecords();
-    public void saveOrUpdate(Record record);
+    public void save(Record record);
 
 }

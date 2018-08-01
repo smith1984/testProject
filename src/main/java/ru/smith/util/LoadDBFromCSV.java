@@ -19,16 +19,14 @@ public class LoadDBFromCSV {
 
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = ";";
 
         try {
             br = new BufferedReader(new FileReader(path));
 
             line = br.readLine();
-            line = br.readLine();
 
-
-           // while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
 
                 String[] row = line.split(cvsSplitBy);
 
@@ -48,12 +46,9 @@ public class LoadDBFromCSV {
                     record.setSudirresponse(row[10]);
                     record.setYmdh(LocalDateTime.parse(row[11], DateTimeFormatter.ofPattern("yyyy-MM-dd-HH")));
 
-
-                    recordDAOImpl.saveOrUpdate(record);
-                    recordDAOImpl.saveOrUpdate(record);
-                    recordDAOImpl.saveOrUpdate(record);
+                    recordDAOImpl.save(record);
                 }
-            //}
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
