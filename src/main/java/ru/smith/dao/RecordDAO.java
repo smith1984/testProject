@@ -8,8 +8,10 @@ public interface RecordDAO {
 
     List<Record> listAllRecords();
 
-    void saveOrUpdate(Record record);
+    void save(Record record);
 
     void delete(Record record);
+
+    void update(Record record);
 
 }

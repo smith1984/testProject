@@ -21,8 +21,13 @@ public class RecordDAOImpl implements RecordDAO {
     }
 
     @Override
-    public void saveOrUpdate(Record record) {
-        session.saveOrUpdate(record);
+    public void update(Record record) {
+        session.update(record);
+    }
+
+    @Override
+    public void save(Record record) {
+        session.save(record);
     }
 
     @Override
