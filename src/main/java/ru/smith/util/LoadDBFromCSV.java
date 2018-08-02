@@ -1,5 +1,6 @@
 package ru.smith.util;
 
+import org.hibernate.Session;
 import ru.smith.dao.RecordDAOImpl;
 import ru.smith.entity.Record;
 
@@ -11,27 +12,30 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
 public class LoadDBFromCSV {
 
     public static void load(String path) {
         Record record;
-        RecordDAOImpl recordDAOImpl = new RecordDAOImpl();
-
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ";";
+        String[] row;
+        int count;
+
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 
         try {
-            br = new BufferedReader(new FileReader(path));
+            session.beginTransaction();
+            try {
+                br = new BufferedReader(new FileReader(path));
 
-            line = br.readLine();
+                br.readLine();
+                count = 0;
 
-            while ((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
 
-                String[] row = line.split(cvsSplitBy);
-
-                if (row.length == 12) {
-
+                    count++;
+                    row = line.split(";(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);;
                     record = new Record();
                     record.setSsoid(row[0]);
                     record.setTs(Instant.ofEpochSecond(Long.parseLong(row[1])));
@@ -46,22 +50,35 @@ public class LoadDBFromCSV {
                     record.setSudirresponse(row[10]);
                     record.setYmdh(LocalDateTime.parse(row[11], DateTimeFormatter.ofPattern("yyyy-MM-dd-HH")));
 
-                    recordDAOImpl.save(record);
+                    new RecordDAOImpl(session).saveOrUpdate(record);
+                    if (count % 100 == 0) {
+                        session.flush();
+                        session.clear();
+                    }
+                }
+                System.out.println("В базу данных добавленно записей - " + count);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            session.getTransaction().rollback();
             e.printStackTrace();
         } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            session.close();
         }
     }
 }

@@ -1,0 +1,47 @@
+ public List<Record> listAllRecords() {
+        try{
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query query = session.createQuery("SELECT r FROM Record r");
+            session.getTransaction().commit();
+            return query.list();
+
+        }
+        catch (Exception e){
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            session.close();
+        }
+    }
+
+        public void save(Record record) {
+            try{
+                session = HibernateUtil.getSessionFactory().getCurrentSession();
+                session.beginTransaction();
+                session.save(record);
+                session.getTransaction().commit();
+            }
+            catch (Exception e){
+                session.getTransaction().rollback();
+                e.printStackTrace();
+            }
+            finally {
+                session.close();
+            }
+        }
+
+      try{
+                        session.beginTransaction();
+                        session.saveOrUpdate(record);
+                        session.getTransaction().commit();
+                    }
+                    catch (Exception e){
+                        session.getTransaction().rollback();
+                        e.printStackTrace();
+                    }
+                    finally {
+                        session.close();
+                    }
