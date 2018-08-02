@@ -1,0 +1,13 @@
+
+        //Запрос на поиск записей за последний час
+        Instant instant = ((Instant)session.getNamedQuery("findMaxTimeStamp").list().get(0)).minus(Duration.ofHours(1));
+
+        Query query = session.getNamedQuery("selectRecordWithTSMore");
+        query.setParameter("hour", instant);
+
+        Set<String> set = new HashSet<>();
+        for(Object r: query.list()){
+            if (r instanceof Record){
+                set.add(((Record) r).getSsoid() + ";" + ((Record) r).getFormid());
+            }
+        }

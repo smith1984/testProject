@@ -21,7 +21,6 @@ public class LoadDBFromCSV {
         String[] row;
         int count;
 
-        long start = System.currentTimeMillis();
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
         RecordDAOImpl recordDAO = new RecordDAOImpl(session);
@@ -62,7 +61,6 @@ public class LoadDBFromCSV {
             e.printStackTrace();
         } finally {
             session.close();
-            System.out.println(start - System.currentTimeMillis());
             if (br != null) {
                 try {
                     br.close();

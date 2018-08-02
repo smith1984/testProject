@@ -8,6 +8,17 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "findMaxTimeStamp",
+                query = "SELECT MAX(r.ts) FROM Record r"
+        ),
+        @NamedQuery(
+                name = "selectRecordWithTSMore",
+                query = "SELECT r FROM Record r WHERE r.ts > :hour"
+        )
+})
+
 @Entity
 @Table(name = "records")
 @Data
