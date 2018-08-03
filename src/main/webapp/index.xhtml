@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Тестовый проект</title>
+</h:head>
+<h:body style=" background-color: #DCD0D0;">
+    <h:form id="loading_data" style="margin: auto; width: 480px; padding-top: 50px;">
+    <p:panel>
+        <f:facet name="header">
+            <div style="text-align:  center; color: dimgrey">
+                <h1>Тестовый проект по обработки статистических данных запросов к сайтам</h1>
+                <p style="color: black">Для дальнейшей работы необходимо загрузить информацию из файла csv в базу данных</p>
+            </div>
+        </f:facet>
+        <f:facet name="footer">
+            <div style="text-align: center;">
+                <p:commandButton id="loadbtn" value="Загрузка ..."  action="#{loadDB.load}"/>
+            </div>
+        </f:facet>
+
+    </p:panel>
+    </h:form>
+</h:body>
+</html>
