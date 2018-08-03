@@ -17,4 +17,16 @@
                long count = (long)query.list().get(0);
                objectList.forEach(obj -> System.out.println((long)obj[0]*100*1.0/count*1.0 + "% " + obj[1] + " " + obj[2]));
 
+
+
+             select r.ts, r.ssoid, r.formid, r.subtype from records r join (select max(ts), ssoid, formid from records rec where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid) where r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid;
+
+
                select max(ts), ssoid, formid from records where subtype <> 'send' and formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid;
+
+ select r.ts, r.ssoid, r.formid, r.subtype from records r where r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid (select max(ts), ssoid, formid from records rec where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid);
+
+
+
+ select r.ts, r.ssoid, r.formid, r.subtype from records r join (select max(ts) ts, ssoid, formid from records where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid) AS rec on r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid;
+
