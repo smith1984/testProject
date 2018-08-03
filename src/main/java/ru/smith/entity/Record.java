@@ -10,12 +10,20 @@ import java.time.LocalDateTime;
 
 @NamedQueries({
         @NamedQuery(
-                name = "findMaxTimeStamp",
+                name = "maxTimeStamp",
                 query = "SELECT MAX(r.ts) FROM Record r"
         ),
         @NamedQuery(
-                name = "selectRecordWithTSMore",
-                query = "SELECT r FROM Record r WHERE r.ts > :hour"
+                name = "recordsWithTSMoreX",
+                query = "SELECT r.ssoid, r.formid FROM Record r WHERE r.ts > :hour"
+        ),
+        @NamedQuery(
+                name = "ratingForms",
+                query = "SELECT COUNT(r.formid), r.formid, r.orgid FROM Record r GROUP BY r.orgid, r.formid ORDER BY COUNT(r.formid) DESC"
+        ),
+        @NamedQuery(
+                name = "countUseForm",
+                query = "SELECT COUNT(r.formid) FROM Record r"
         )
 })
 

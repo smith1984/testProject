@@ -7,9 +7,12 @@
 
         Set<String> set = new HashSet<>();
         for(Object r: query.list()){
-            if (r instanceof Record){
-                set.add(((Record) r).getSsoid() + ";" + ((Record) r).getFormid());
+                set.add(r[0] + ";" + r[1]);
             }
-        }
 
-         select count(r.formid), r.formid from records r group by r.formid order by count(r.formid) desc;
+       //Запрос на поиск 5 самое часто используемых форм
+       Query query =session.getNamedQuery("ratingForms").setMaxResults(5);
+               List<Object[]> objectList= query.list();
+               query = session.getNamedQuery("countUseForm");
+               long count = (long)query.list().get(0);
+               objectList.forEach(obj -> System.out.println((long)obj[0]*100*1.0/count*1.0 + "% " + obj[1] + " " + obj[2]));

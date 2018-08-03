@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class LoadDBFromCSV {
 
     public static void load(String path) {
@@ -34,19 +33,21 @@ public class LoadDBFromCSV {
 
                 count++;
                 row = line.split(";(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+
                 record = new Record();
                 record.setSsoid(row[0]);
-                record.setTs(Instant.ofEpochSecond(Long.parseLong(row[1])));
-                record.setGrp(row[2]);
-                record.setType(row[3]);
-                record.setSubtype(row[4]);
-                record.setUrl(row[5]);
-                record.setOrgid(row[6]);
-                record.setFormid(row[7]);
-                record.setCode(row[8]);
-                record.setLtpa(row[9]);
-                record.setSudirresponse(row[10]);
-                record.setYmdh(LocalDateTime.parse(row[11], DateTimeFormatter.ofPattern("yyyy-MM-dd-HH")));
+                if (!row[1].isEmpty()) record.setTs(Instant.ofEpochSecond(Long.parseLong(row[1])));
+                if (!row[2].isEmpty()) record.setGrp(row[2]);
+                if (!row[3].isEmpty()) record.setType(row[3]);
+                if (!row[4].isEmpty()) record.setSubtype(row[4]);
+                if (!row[5].isEmpty()) record.setUrl(row[5]);
+                if (!row[6].isEmpty()) record.setOrgid(row[6]);
+                if (!row[7].isEmpty()) record.setFormid(row[7]);
+                if (!row[8].isEmpty()) record.setCode(row[8]);
+                if (!row[9].isEmpty()) record.setLtpa(row[9]);
+                if (!row[10].isEmpty()) record.setSudirresponse(row[10]);
+                if (!row[11].isEmpty()) record.setYmdh(LocalDateTime.parse(row[11],
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd-HH")));
 
                 recordDAO.save(record);
                 if (count % 100 == 0) {

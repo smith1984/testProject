@@ -7,6 +7,7 @@ import ru.smith.util.LoadDBFromCSV;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -19,10 +20,8 @@ public class Main {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
-        Query query =session.createQuery("SELECT r FROM Record r WHERE r.ts > :hour");
         session.getTransaction().commit();
         session.close();
         HibernateUtil.shutdown();
-
     }
 }
