@@ -16,3 +16,5 @@
                query = session.getNamedQuery("countUseForm");
                long count = (long)query.list().get(0);
                objectList.forEach(obj -> System.out.println((long)obj[0]*100*1.0/count*1.0 + "% " + obj[1] + " " + obj[2]));
+
+               select max(ts), ssoid, formid from records where subtype <> 'send' and formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid;
