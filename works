@@ -1,32 +1,34 @@
 
-        //Запрос на поиск записей за последний час
-        Instant instant = ((Instant)session.getNamedQuery("findMaxTimeStamp").list().get(0)).minus(Duration.ofHours(1));
+//Запрос на поиск записей за последний час
+            Instant instant = ((Instant)session.getNamedQuery("maxTimeStamp").list().get(0)).minus(Duration.ofHours(1));
 
-        Query query = session.getNamedQuery("selectRecordWithTSMore");
-        query.setParameter("hour", instant);
+             Query query = session.getNamedQuery("recordsWithTSMoreX");
+             query.setParameter("hour", instant);
+             List<Object[]> objectList= query.list();
 
-        Set<String> set = new HashSet<>();
-        for(Object r: query.list()){
-                set.add(r[0] + ";" + r[1]);
-            }
+             Set<String> set = new HashSet<>();
+             objectList.forEach(obj ->
+                 set.add(obj[0] + ";" + obj[1]));
 
-       //Запрос на поиск 5 самое часто используемых форм
-       Query query =session.getNamedQuery("ratingForms").setMaxResults(5);
+             set.forEach(System.out::println);
+
+//Запрос на поиск 5 самое часто используемых форм
+               Query query =session.getNamedQuery("ratingForms").setMaxResults(5);
                List<Object[]> objectList= query.list();
                query = session.getNamedQuery("countUseForm");
                long count = (long)query.list().get(0);
                objectList.forEach(obj -> System.out.println((long)obj[0]*100*1.0/count*1.0 + "% " + obj[1] + " " + obj[2]));
 
 
+// Запрос на не законченое заполнение
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
 
-             select r.ts, r.ssoid, r.formid, r.subtype from records r join (select max(ts), ssoid, formid from records rec where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid) where r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid;
+        Query query = session.getNamedNativeQuery("stopUseForm");
+        List<Object[]> objectList= query.list();
+        objectList.forEach(obj -> System.out.println(obj[0] + "; "
+                + obj[1] + "; " + obj[2] + "; " + obj[3]+ "; " + obj[4]));
 
-
-               select max(ts), ssoid, formid from records where subtype <> 'send' and formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid;
-
- select r.ts, r.ssoid, r.formid, r.subtype from records r where r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid (select max(ts), ssoid, formid from records rec where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid);
-
-
-
- select r.ts, r.ssoid, r.formid, r.subtype from records r join (select max(ts) ts, ssoid, formid from records where formid is not null and ssoid <> '' and ssoid <> 'Unauthorized'  group by ssoid, formid) AS rec on r.ts = rec.ts and r.ssoid = rec.ssoid and r.formid = rec.formid;
-
+        session.getTransaction().commit();
+        session.close();
+        HibernateUtil.shutdown();
