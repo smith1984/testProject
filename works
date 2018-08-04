@@ -19,16 +19,3 @@
                long count = (long)query.list().get(0);
                objectList.forEach(obj -> System.out.println((long)obj[0]*100*1.0/count*1.0 + "% " + obj[1] + " " + obj[2]));
 
-
-// Запрос на не законченое заполнение
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        Query query = session.getNamedNativeQuery("stopUseForm");
-        List<Object[]> objectList= query.list();
-        objectList.forEach(obj -> System.out.println(obj[0] + "; "
-                + obj[1] + "; " + obj[2] + "; " + obj[3]+ "; " + obj[4]));
-
-        session.getTransaction().commit();
-        session.close();
-        HibernateUtil.shutdown();
