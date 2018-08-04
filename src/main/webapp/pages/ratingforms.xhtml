@@ -4,8 +4,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Rating forms"/>
-</f:view>
+<h:head>
+    <title>Топ 5 форм самое часто используемых</title>
+</h:head>
+<h:body style=" background-color: #DCD0D0">
+    <h:form>
+        <p:commandLink action="/pages/main?faces-redirect=true" value="Вернуться к выбору отчета"/>
+    </h:form >
+    <br/>
+    <div >
+        <p:chart type="pie" model="#{raitingForms.pieModel}" style="margin: auto; width:480px;height:400px" />
+    </div>
+
+    <br/>
+</h:body>
 </html>

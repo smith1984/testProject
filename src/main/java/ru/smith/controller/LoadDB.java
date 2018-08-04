@@ -13,7 +13,7 @@ public class LoadDB {
 
         ClassLoader classLoader = getClass().getClassLoader();
         String path = classLoader.getResource("test_case.csv").getPath();
-        //LoadDBFromCSV.load(path);
+        LoadDBFromCSV.load(path);
 
         return "/pages/main?faces-redirect=true";
     }
